@@ -1,0 +1,21 @@
+[package]
+name = "shard-elect"
+version = "0.1.0"
+edition = "2021"
+description = "Distributed leader election via AWS Route53 TXT records"
+license = "MIT"
+keywords = ["aws", "route53", "leader-election", "distributed", "dns"]
+categories = ["asynchronous", "network-programming"]
+
+[dependencies]
+aws-config = "1"
+aws-sdk-route53 = "1"
+async-trait = "0.1"
+tokio = { version = "1", features = ["rt", "time", "sync", "macros"] }
+thiserror = "2"
+tracing = "0.1"
+uuid = { version = "1", features = ["v4"] }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["full"] }
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
