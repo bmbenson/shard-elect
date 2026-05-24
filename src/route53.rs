@@ -11,6 +11,8 @@ use crate::{
     locker::Locker,
 };
 
+static DEFAULT_DNS_TTL_SEC: i64 = 60;
+
 /// A [`Locker`] backed by AWS Route53 TXT records.
 ///
 /// Each shard gets a TXT record at `{shard_id}.{base_domain}` whose value is
@@ -53,7 +55,7 @@ impl Route53Locker {
             client,
             hosted_zone_id: zone_id,
             base_domain: domain,
-            dns_ttl: 60,
+            dns_ttl: DEFAULT_DNS_TTL_SEC,
         }
     }
 
@@ -213,6 +215,7 @@ impl Locker for Route53Locker {
         let Some(existing) = current else {
             return Ok(());
         };
+        // Don't release a lock that isn't ours.
         if existing.owner_id != owner_id {
             return Ok(());
         }

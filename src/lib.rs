@@ -52,13 +52,6 @@
 //! With the default 5-second renew period a single coordinator makes ~1 call
 //! every 5 seconds; you can safely run ~25 shards per zone at that rate.
 //!
-//! # Propagation note
-//! Route53 changes are queued asynchronously (`PENDING` → `INSYNC`).  During the
-//! brief propagation window two nodes could each believe they hold the lock.  In
-//! practice propagation completes in seconds, well within the 15-second default
-//! lease, making this safe for all workloads that can tolerate brief overlaps.
-//! If your workload requires strict single-writer guarantees, wait for `INSYNC`
-//! before acting on leadership (not yet built in; contributions welcome).
 
 mod coordinator;
 mod error;

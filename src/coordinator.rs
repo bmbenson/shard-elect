@@ -7,6 +7,9 @@ use tracing::{debug, info, warn};
 
 use crate::{Error, Locker};
 
+static DEFAULT_LEASE_DURATION_SEC: u64 = 15;
+static DEFAULT_RENEW_PERIOD_SEC: u64 = 5;
+
 /// Configuration for a [`Coordinator`].
 ///
 /// # Defaults
@@ -38,8 +41,8 @@ impl<L: Locker> Config<L> {
         Self {
             shard_id: shard_id.into(),
             owner_id: uuid::Uuid::new_v4().to_string(),
-            lease_duration: Duration::from_secs(15),
-            renew_period: Duration::from_secs(5),
+            lease_duration: Duration::from_secs(DEFAULT_LEASE_DURATION_SEC),
+            renew_period: Duration::from_secs(DEFAULT_RENEW_PERIOD_SEC),
             locker: Arc::new(locker),
         }
     }
@@ -69,7 +72,7 @@ impl<L: Locker> Config<L> {
 /// - **Acquire timer** (every `renew_period / 2`): if this node is follower, try to claim
 ///   an available or expired lease.
 ///
-/// If renewal fails for any reason the node immediately demotes itself to follower
+/// If renewal fails for any reason, the node immediately demotes itself to follower
 /// (fail-safe: avoids zombie leaders during network partitions).
 ///
 /// # Shutdown

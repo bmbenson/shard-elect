@@ -6,7 +6,7 @@ use crate::Error;
 /// Backend storage for a distributed lock.
 ///
 /// Route53 is the primary implementation, but the trait exists so that test doubles
-/// and alternative backends (e.g. DynamoDB, etcd) can be swapped in without changing
+/// and alternative backends (e.g. DynamoDB, etc) can be swapped in without changing
 /// the coordinator logic.
 ///
 /// ## Semantics
